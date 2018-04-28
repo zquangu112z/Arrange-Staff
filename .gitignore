@@ -8,3 +8,5 @@ dist/
 .cache
 .benchmarks
 .~lock.*
+src/client_server/output/*
+
