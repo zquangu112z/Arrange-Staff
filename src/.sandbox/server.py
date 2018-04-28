@@ -1,4 +1,8 @@
 import socket
+from .helper import load_staff_list
+
+STAFF_FILENAME = "src/.sandbox/output/server_staff.xlsx"
+ROOM_FILENAME = "src/.sandbox/output/server_room.xlsx"
 
 host = ''        # Symbolic name meaning all available interfaces
 port = 12345     # Arbitrary non-privileged port
@@ -11,7 +15,7 @@ while True:
     print('Connected by', addr)
 
     # Save to file
-    with open('server_log.xlsx', 'wb') as f:
+    with open(STAFF_FILENAME, 'wb') as f:
         while True:
             print('receiving data...')
             data = conn.recv(1024)
@@ -20,4 +24,9 @@ while True:
             f.write(data)
 
     f.close()
+
+    # Load staff list into a dataframe
+    dfs = load_staff_list(STAFF_FILENAME)
+    print(dfs)
+
     conn.close()
