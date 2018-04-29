@@ -11,6 +11,6 @@ s.connect((host, port))
 
 # Send the first file
 send_file(STAFF_FILENAME, s)
-send_file(ROOM_FILENAME, s)
+# send_file(ROOM_FILENAME, s)
 
 s.close()

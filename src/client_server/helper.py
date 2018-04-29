@@ -9,12 +9,9 @@ def load_staff_list(filename):
 
 def send_file(filename, socket):
     with open(filename, "rb") as f:
-        data = f.read(1024)
-        while data:
-            socket.send(data)
-            data = f.read(1024)
+        for data in f:
+            socket.sendall(data)
     f.close()
-    socket.send(b"ENDED")
     print(">>>>>Sent {}".format(filename))
 
 
@@ -24,9 +21,8 @@ def receive_file(filename, socket):
             print('receiving data...')
             data = socket.recv(1024)
             if not data:
-                break
-                continue
-            if data == b'ENDED':
+                print(">>>>>>>>>>>Not data")
                 break
             f.write(data)
     f.close()
+    print("Saved file")
