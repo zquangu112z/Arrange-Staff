@@ -17,3 +17,5 @@ make server-run
 ```bash
 make client-run
 ```
+
+After you run the client, the result will be available at *./src/client_server/output*

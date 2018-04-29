@@ -6,7 +6,7 @@ ROOM_FILENAME = "data/Danh-sach-phong-thi.xlsx"
 RESULT_FILENAME = "src/client_server/output/result.xlsx"
 
 host = socket.gethostname()
-port = 12344                   # The same port as used by the server
+port = 12345
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((host, port))
 
