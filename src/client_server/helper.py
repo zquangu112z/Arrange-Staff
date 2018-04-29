@@ -8,6 +8,17 @@ def load_dataframe(filename):
     return df
 
 
+def arrange_staff(dfStaff, dfRoom):
+    if(len(dfRoom) > len(dfStaff)):
+        print("There is not enough staff. Please add more staff.")
+        return None
+
+    dfStaff.rename(columns={dfStaff.columns[3]: 'Phòng thi'}, inplace=True)
+    dfStaff[dfStaff.columns[3]] = pd.Series(dfRoom[:len(dfStaff)],
+                                            index=dfStaff.index)
+    return dfStaff
+
+
 def send_1_file_ftp(filename, socket):
     filesize = os.path.getsize(filename)
     # encode filesize as 32 bit binary
