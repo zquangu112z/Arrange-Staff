@@ -9,14 +9,64 @@ def load_dataframe(filename):
 
 
 def arrange_staff(dfStaff, dfRoom):
-    if(len(dfRoom) > len(dfStaff)):
+    # shuffle the list of staff
+    dfStaff = dfStaff.sample(frac=1)
+    if(len(dfRoom) > 2 * len(dfStaff)):
         print("There is not enough staff. Please add more staff.")
         return None
 
-    dfStaff.rename(columns={dfStaff.columns[3]: 'Phòng thi'}, inplace=True)
-    dfStaff[dfStaff.columns[3]] = pd.Series(dfRoom[:len(dfStaff)],
-                                            index=dfStaff.index)
-    return dfStaff
+    len_room = len(dfRoom)
+
+    # GIÁM THỊ 1
+    dfRoom.insert(
+        loc=len(dfRoom.iloc[0]),
+        column="Giám thị 1",
+        value=dfStaff[dfStaff.columns[1]][0:len_room].values)
+
+    dfRoom.insert(
+        loc=len(dfRoom.iloc[0]),
+        column="Mã số giám thị 1",
+        value=dfStaff[dfStaff.columns[0]][:len_room].values)
+
+    # GIÁM THỊ 2
+    dfRoom.insert(
+        loc=len(dfRoom.iloc[0]),
+        column="Giám thị 2",
+        value=dfStaff[dfStaff.columns[1]][len_room:2 * len_room].values)
+
+    dfRoom.insert(
+        loc=len(dfRoom.iloc[0]),
+        column="Mã số giám thị 2",
+        value=dfStaff[dfStaff.columns[0]][len_room:2 * len_room].values)
+
+    # GIÁM THỊ HÀNH LANG @TODO: optimize the code
+    nonAssignedStaff = dfStaff[dfStaff.columns[1]][2 * len(dfRoom):].values
+    nonAssignedStaffCode = dfStaff[dfStaff.columns[0]][2 * len(dfRoom):].values
+
+    num_lobby = int(len_room / len(nonAssignedStaff))
+    dfStaffLobby = []
+    dfStaffLobbyCode = []
+    for i in range(len(nonAssignedStaff) - 1):
+        for j in range(num_lobby):
+            dfStaffLobby.append(nonAssignedStaff[i])
+            dfStaffLobbyCode.append(nonAssignedStaffCode[i])
+
+    for i in range(num_lobby * (len(nonAssignedStaff) - 1), len_room):
+        dfStaffLobby.append(nonAssignedStaff[len(nonAssignedStaff) - 1])
+        dfStaffLobbyCode.append(
+            nonAssignedStaffCode[len(nonAssignedStaffCode) - 1])
+
+    dfRoom.insert(
+        loc=len(dfRoom.iloc[0]),
+        column="Giám thị hành lang",
+        value=dfStaffLobby)
+
+    dfRoom.insert(
+        loc=len(dfRoom.iloc[0]),
+        column="Mã số giá thị hành lang",
+        value=dfStaffLobbyCode)
+
+    return dfRoom
 
 
 def send_1_file_ftp(filename, socket):
